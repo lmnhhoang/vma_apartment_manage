@@ -3,16 +3,23 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.ExtraFee;
 import com.example.vma_java_project.repository.ExtraFeeRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -41,16 +48,6 @@ public class ExtraFeeController {
     return ResponseEntity.ok(extraFee);
   }
 
-  //get fee by fee name
-  @GetMapping("/ex_fee/{fee_type}")
-  public ResponseEntity<List<ExtraFee>> getExFeeByName(@PathVariable String fee_type) {
-    List<ExtraFee> extraFee = null;
-    try {
-      extraFee = extraFeeRepository.findAllByName(fee_type);
-    } catch (ResourceNotFoundException e) {
-    }
-    return ResponseEntity.ok(extraFee);
-  }
 
   // update fee rest api
   @PutMapping("/ex_fee/{id}")
@@ -76,5 +73,10 @@ public class ExtraFeeController {
     Map<String, Boolean> response = new HashMap<>();
     response.put("deleted", Boolean.TRUE);
     return ResponseEntity.ok(response);
+  }
+  //Calculate extra fee
+  @GetMapping("/ex_fee/total")
+  public Double getExFeeTotal() {
+    return extraFeeRepository.calculateExtraFee();
   }
 }

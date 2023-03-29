@@ -1,12 +1,21 @@
 package com.example.vma_java_project.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "Dwellers")
@@ -14,36 +23,30 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dwellers implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dweller_id")
-    private long dweller_id;
-    @Column(name = "cid")
-    private double cid;
-    @Column(name = "fullname")
-    private String fullname;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "phone")
-    private String phone;
-    @Column(name = "birthday",columnDefinition = "DATE")
-    private LocalDate birthday;
-    @Column(name = "gender")
-    private String gender;
-    @ManyToOne
-    @JoinColumn(name = "dweller_aprtm")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Apartment dweller_aprtm;
 
-    public Dwellers(double cid, String fullname, String email,
-                    String phone, LocalDate birthday, String gender, Apartment dweller_aprtm) {
-        this.cid = cid;
-        this.fullname = fullname;
-        this.email = email;
-        this.phone = phone;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.dweller_aprtm = dweller_aprtm;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "dweller_id")
+  private long dweller_id;
+  @Column(name = "cid")
+  private double cid;
+  @Column(name = "fullname")
+  private String fullname;
+  @Column(name = "email")
+  private String email;
+  @Column(name = "phone")
+  private String phone;
+  @Column(name = "birthday", columnDefinition = "DATE")
+  private LocalDate birthday;
+  @Column(name = "gender")
+  private String gender;
+
+  @ManyToOne(targetEntity = Apartment.class, fetch = FetchType.EAGER)
+  @JoinColumn(name = "dweller_aprtm", insertable = false, updatable = false)
+  @EqualsAndHashCode.Exclude
+  @ToString.Exclude
+  private Apartment apartment;
+  @Column(name = "dweller_aprtm")
+  private Long apartment_id;
+
 }
