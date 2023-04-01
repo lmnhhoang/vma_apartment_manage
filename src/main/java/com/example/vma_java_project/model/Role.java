@@ -1,7 +1,10 @@
 package com.example.vma_java_project.model;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,21 +14,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "extra_fee")
+@Table(name = "roles")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ExtraFee {
+@AllArgsConstructor
+public class Role {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "fee_id")
-  private long fee_id;
-  @Column(name = "fee_type")
-  private String fee_type;
+  @Column(name = "id")
+  private long id;
 
-  @Column(name = "value")
-  private long fee_value;
-
-
+  @Enumerated(EnumType.STRING)
+  @Column(length = 20)
+  private ERole name;
 }

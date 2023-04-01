@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,18 +31,21 @@ public class AprtmentManageController {
 
   //Get all apartmentManage
   @GetMapping("/listMange")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public List<ApartmentManage> getAllManage() {
     return aprtManageRepository.findAll();
   }
 
   //Create apartmentManage rest api
   @PostMapping("/addManage")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ApartmentManage createManage(@RequestBody ApartmentManage apartmentManage) {
     return aprtManageRepository.save(apartmentManage);
   }
 
   // get apartmentManage by id rest api
   @GetMapping("/listManage/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<ApartmentManage> getManageById(@PathVariable Long id) {
     ApartmentManage apartmentManage = aprtManageRepository.findById(id)
         .orElseThrow(
@@ -51,6 +55,7 @@ public class AprtmentManageController {
 
   // update apartmentManage rest api
   @PutMapping("/addManage/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<ApartmentManage> updateManage(@PathVariable Long id,
       @RequestBody ApartmentManage manageDetails) {
     ApartmentManage apartmentManage = aprtManageRepository.findById(id)
@@ -68,6 +73,7 @@ public class AprtmentManageController {
 
   // delete apartmentManage rest api
   @DeleteMapping("/deleteManage/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public ResponseEntity<Map<String, Boolean>> deleteManage(@PathVariable Long id) {
     ApartmentManage apartmentManage = aprtManageRepository.findById(id)
         .orElseThrow(

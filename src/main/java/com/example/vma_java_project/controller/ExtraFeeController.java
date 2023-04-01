@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,19 +30,22 @@ public class ExtraFeeController {
   ExtraFeeRepository extraFeeRepository;
 
   //Get all extraFee
-  @GetMapping("/ex_fee")
+  @GetMapping("/fee")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public List<ExtraFee> getAllExFee() {
     return extraFeeRepository.findAll();
   }
 
   //Create fee rest api
-  @PostMapping("/ex_fee")
+  @PostMapping("/addFee")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ExtraFee createExFee(@RequestBody ExtraFee extraFee) {
     return extraFeeRepository.save(extraFee);
   }
 
   // get fee by id rest api
-  @GetMapping("/ex_fee/{id}")
+  @GetMapping("/fee/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<ExtraFee> getExFeeById(@PathVariable Long id) {
     ExtraFee extraFee = extraFeeRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Extra Fee not exist with id :" + id));
@@ -50,7 +54,8 @@ public class ExtraFeeController {
 
 
   // update fee rest api
-  @PutMapping("/ex_fee/{id}")
+  @PutMapping("/addFee/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<ExtraFee> updateExFee(@PathVariable Long id,
       @RequestBody ExtraFee exFeeDetails) {
     ExtraFee extraFee = extraFeeRepository.findById(id)
@@ -64,7 +69,8 @@ public class ExtraFeeController {
   }
 
   // delete fee rest api
-  @DeleteMapping("/ex_fee/{id}")
+  @DeleteMapping("/deleteFee/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Map<String, Boolean>> deleteExFee(@PathVariable Long id) {
     ExtraFee extraFee = extraFeeRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Extra Fee not exist with id :" + id));
@@ -74,8 +80,10 @@ public class ExtraFeeController {
     response.put("deleted", Boolean.TRUE);
     return ResponseEntity.ok(response);
   }
+
   //Calculate extra fee
-  @GetMapping("/ex_fee/total")
+  @GetMapping("/fee/total")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public Double getExFeeTotal() {
     return extraFeeRepository.calculateExtraFee();
   }

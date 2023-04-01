@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,18 +31,21 @@ public class BuildingController {
 
   //Get all User
   @GetMapping("/building")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public List<Building> getAllBuilding() {
     return buildingRepository.findAll();
   }
 
   //Create user rest api
   @PostMapping("/addBuilding")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public Building createBuilding(@RequestBody Building building) {
     return buildingRepository.save(building);
   }
 
   // get user by id rest api
   @GetMapping("/building/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public ResponseEntity<Building> getBuildingById(@PathVariable Long id) {
     Building building = buildingRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Building not exist with id :" + id));
@@ -50,6 +54,7 @@ public class BuildingController {
 
   // update user rest api
   @PutMapping("/addBuilding/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Building> updateBuilding(@PathVariable Long id,
       @RequestBody Building buildingDetails) {
     Building building = buildingRepository.findById(id)
@@ -63,6 +68,7 @@ public class BuildingController {
 
   // delete user rest api
   @DeleteMapping("/deleteBuilding/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Map<String, Boolean>> deleteBuilding(@PathVariable Long id) {
     Building building = buildingRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Building not exist with id :" + id));

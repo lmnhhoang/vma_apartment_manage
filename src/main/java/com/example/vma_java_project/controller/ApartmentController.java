@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,20 +30,24 @@ public class ApartmentController {
 
   @Autowired
   ApartmentRepository apartmentRepository;
+
   //Get all Apartment
-//  @GetMapping("/listApartment")
-//  public List<Apartment> getAllApartment() {
-//    return apartmentRepository.findAll();
-//  }
+  @GetMapping("/listAll")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  public List<Apartment> getAllApartment() {
+    return apartmentRepository.findAll();
+  }
 
   //Create Apartment rest api
   @PostMapping("/addApartment")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public Apartment createApartment(@RequestBody Apartment apartment) {
     return apartmentRepository.save(apartment);
   }
 
   // get Apartment by id rest api
   @GetMapping("/listApartment/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public ResponseEntity<Apartment> getApartmentById(@PathVariable Long id) {
     Apartment apartment = apartmentRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Apartment not exist with id :" + id));
@@ -51,6 +56,7 @@ public class ApartmentController {
 
   // update Apartment rest api
   @PutMapping("/addApartment/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Apartment> updateApartment(@PathVariable Long id,
       @RequestBody Apartment apartmentDetails) {
     Apartment apartment = apartmentRepository.findById(id)
@@ -69,6 +75,7 @@ public class ApartmentController {
 
   // delete Apartment rest api
   @DeleteMapping("/deleteApartment/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Map<String, Boolean>> deleteApartment(@PathVariable Long id) {
     Apartment apartment = apartmentRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Apartment not exist with id :" + id));
@@ -82,6 +89,7 @@ public class ApartmentController {
   //get apartment in building
   @GetMapping("/listApartment")
   @ResponseBody
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public List<Apartment> getApartmentInBuilding(@RequestParam String building) {
     return apartmentRepository.findApartmentByBuildingIn(Long.parseLong(building));
   }
@@ -89,6 +97,7 @@ public class ApartmentController {
   //count apartment in building
   @GetMapping("/countApartment")
   @ResponseBody
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public Double countApartmentInBuilding(@RequestParam String building) {
     return apartmentRepository.countApartmentByInBuilding(Long.parseLong(building));
   }

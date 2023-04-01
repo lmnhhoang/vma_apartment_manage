@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,18 +31,21 @@ public class UserController {
 
   //Get all User
   @GetMapping("/user")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public List<User> getAllUser() {
     return userRepository.findAll();
   }
 
   //Create user rest api
   @PostMapping("/addUser")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public User createUser(@RequestBody User user) {
     return userRepository.save(user);
   }
 
   // get user by id rest api
   @GetMapping("/user/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public ResponseEntity<User> getUserById(@PathVariable Long id) {
     User employee = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + id));
@@ -50,11 +54,12 @@ public class UserController {
 
   // update user rest api
   @PutMapping("/addUser/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + id));
 
-    user.setUser_name(userDetails.getUser_name());
+    user.setUsername(userDetails.getUsername());
     user.setEmail(userDetails.getEmail());
     user.setPassword(userDetails.getPassword());
 
@@ -64,6 +69,7 @@ public class UserController {
 
   // delete user rest api
   @DeleteMapping("/deleteUser/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
     User user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));

@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,18 +33,21 @@ public class DwellerController {
 
   //Get all dweller
   @GetMapping("/listAllCivil")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
   public List<Dwellers> getAllDweller() {
     return dwellerRepository.findAll();
   }
 
   //Create dweller rest api
   @PostMapping("/addCivil")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public Dwellers createDweller(@RequestBody Dwellers dweller) {
     return dwellerRepository.save(dweller);
   }
 
   // get dweller by id rest api
   @GetMapping("/listCivil/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Dwellers> getDwellerById(@PathVariable Long id) {
     Dwellers dweller = dwellerRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Dweller not exist with id :" + id));
@@ -52,6 +56,7 @@ public class DwellerController {
 
   // update dweller rest api
   @PutMapping("/addCivil/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Dwellers> updateDweller(@PathVariable Long id,
       @RequestBody Dwellers dwellerDetails) {
     Dwellers dweller = dwellerRepository.findById(id)
@@ -71,6 +76,7 @@ public class DwellerController {
 
   // delete dweller rest api
   @DeleteMapping("/deleteCivil/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Map<String, Boolean>> deleteDweller(@PathVariable Long id) {
     Dwellers dweller = dwellerRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Dweller not exist with id :" + id));
@@ -80,10 +86,20 @@ public class DwellerController {
     response.put("deleted", Boolean.TRUE);
     return ResponseEntity.ok(response);
   }
-  //count dweller in apartment
+
+  //get dweller in apartment
   @GetMapping("/listCivil")
   @ResponseBody
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public List<Dwellers> getDwellerInApartment(@RequestParam String apartment) {
     return dwellerRepository.findDwellersByApartment_id(Long.parseLong(apartment));
+  }
+
+  //count dweller in apartment
+  @GetMapping("/countCivil")
+  @ResponseBody
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
+  public Double countDwellerInApartment(@RequestParam String apartment) {
+    return dwellerRepository.countDwellersByApartment_id(Long.parseLong(apartment));
   }
 }

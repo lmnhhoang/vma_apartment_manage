@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,19 +30,22 @@ public class BillController {
   BillRepository billRepository;
 
   //Get all Bill
-  @GetMapping("/listBill")
+  @GetMapping("/listAllBill")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public List<Bill> getAllBill() {
     return billRepository.findAll();
   }
 
   //Create Bill rest api
   @PostMapping("/addBill")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public Bill createBill(@RequestBody Bill bill) {
     return billRepository.save(bill);
   }
 
   // get Bill by id rest api
   @GetMapping("/listBill/{id}")
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public ResponseEntity<Bill> getBillById(@PathVariable Long id) {
     Bill bill = billRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Bill not exist with id :" + id));
@@ -50,6 +54,7 @@ public class BillController {
 
   // update bill rest api
   @PutMapping("/addBill/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<Bill> updateBill(@PathVariable Long id, @RequestBody Bill billrDetails) {
     Bill bill = billRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Bill not exist with id :" + id));
@@ -68,6 +73,7 @@ public class BillController {
 
   // delete bill rest api
   @DeleteMapping("/deleteBill/{id}")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<Map<String, Boolean>> deleteBill(@PathVariable Long id) {
     Bill bill = billRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Dweller not exist with id :" + id));

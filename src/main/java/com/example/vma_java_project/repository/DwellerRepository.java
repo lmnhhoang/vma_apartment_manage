@@ -15,4 +15,7 @@ public interface DwellerRepository extends JpaRepository<Dwellers, Long> {
 
   @Query("select d from Dwellers d where d.apartment_id = ?1")
   List<Dwellers> findDwellersByApartment_id(@Param("apartment_id") Long apartmentId);
+
+  @Query("select d.apartment_id from Dwellers d where d.dweller_id = ?1")
+  Dwellers findOneApartment_idById(@Param("dweller_id") Long dwellerId);
 }
