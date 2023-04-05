@@ -3,11 +3,16 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.Apartment;
 import com.example.vma_java_project.repository.ApartmentRepository;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -100,5 +105,59 @@ public class ApartmentController {
   @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
   public Double countApartmentInBuilding(@RequestParam String building) {
     return apartmentRepository.countApartmentByInBuilding(Long.parseLong(building));
+  }
+
+  @GetMapping("/searchApartment")
+  @ResponseBody
+  public List<Apartment> searchApartmentByName(@RequestParam("search") String search,
+      @RequestParam("type") String type) {
+    switch (type) {
+      case "email":
+        return apartmentRepository.searchApartmentByEmail(search);
+      case "acreage":
+        return apartmentRepository.searchApartmentByAcreage(search);
+      default:
+        return apartmentRepository.searchApartmentByRoomNo(search);
+    }
+  }
+
+  @GetMapping("/getApartment")
+  @ResponseBody
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_MODERATOR')")
+  public ResponseEntity<Map<String, Object>> getAllApartment(
+      @RequestParam(required = false) String building, @RequestParam(required = false) String room,
+      @RequestParam(defaultValue = "0") Integer page,
+      @RequestParam(defaultValue = "5") Integer size,
+      @RequestParam(defaultValue = "apartment_id") String sortBy) {
+    try {
+      List<Apartment> apartments = new ArrayList<Apartment>();
+      Pageable paging = PageRequest.of(page, size);
+
+      Page<Apartment> pageTuts;
+      if (building != null) {
+        if (room != null) {
+          pageTuts = apartmentRepository.findApartmentInBuildingAndRoom(room,
+              Long.parseLong(building), paging);
+        } else {
+          pageTuts = apartmentRepository.findApartmentInBuilding(Long.parseLong(building), paging);
+        }
+      } else if (building == null && room != null) {
+        pageTuts = apartmentRepository.searchApartmentByRoom(room, paging);
+      } else {
+        pageTuts = apartmentRepository.findAll(paging);
+      }
+
+      apartments = pageTuts.getContent();
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("apartments", apartments);
+      response.put("currentPage", pageTuts.getNumber());
+      response.put("totalItems", pageTuts.getTotalElements());
+      response.put("totalPages", pageTuts.getTotalPages());
+
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

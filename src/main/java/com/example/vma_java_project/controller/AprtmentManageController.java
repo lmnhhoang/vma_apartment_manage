@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class AprtmentManageController {
   AprtManageRepository aprtManageRepository;
 
   //Get all apartmentManage
-  @GetMapping("/listMange")
+  @GetMapping("/listManage")
   @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
   public List<ApartmentManage> getAllManage() {
     return aprtManageRepository.findAll();
@@ -83,5 +84,11 @@ public class AprtmentManageController {
     Map<String, Boolean> response = new HashMap<>();
     response.put("deleted", Boolean.TRUE);
     return ResponseEntity.ok(response);
+  }
+
+  @Scheduled(cron = "0 0 5 10 * ?")
+  public ApartmentManage ScheduleAddManage() {
+    ApartmentManage apartmentManage = new ApartmentManage();
+    return aprtManageRepository.save(apartmentManage);
   }
 }

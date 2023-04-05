@@ -37,6 +37,8 @@ public class Apartment {
   private String status;
   @Column(name = "description")
   private String description;
+  @Column(name = "p_email")
+  private String presenter_email;
   @ManyToOne(targetEntity = Building.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "in_building", insertable = false, updatable = false)
   @EqualsAndHashCode.Exclude

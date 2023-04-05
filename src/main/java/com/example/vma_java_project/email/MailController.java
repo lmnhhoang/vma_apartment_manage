@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,8 +17,8 @@ public class MailController {
   @Autowired
   UserRepository userRepository;
 
-  @PostMapping("/email")
-  @Scheduled(cron = "0 0 19 15 * ? *")
+  //  @PostMapping("/email")
+  @Scheduled(cron = "0 0 19 15 * ?")
   public void sendMail() {
     ArrayList<String> usernames = userRepository.findAllUsername();
     ArrayList<String> emails = userRepository.findAllEmail();
