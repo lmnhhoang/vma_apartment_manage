@@ -12,10 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
-  @Query("select count (a.apartment_id) from Apartment a where a.building_id = ?1")
+  @Query("select count (a.apartment_id) from Apartment a where a.building_id = :building_id")
   Double countApartmentByInBuilding(@Param("building_id") long buildingId);
 
-  @Query("select a from Apartment a where a.building_id = ?1")
+  @Query("select a from Apartment a where a.building_id = :building_id")
   List<Apartment> findApartmentByBuildingIn(@Param("building_id") long buildingId);
 
   @Query("select a from Apartment a where a.roomNo like %:search%")
@@ -36,4 +36,10 @@ public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
   @Query("select a from Apartment a where a.roomNo like %:search% and a.building_id = :building_id")
   Page<Apartment> findApartmentInBuildingAndRoom(@Param("search") String search,
       @Param("building_id") long buildingId, Pageable pageable);
+
+  @Query("select a.apartment_id from Apartment a")
+  List<Long> getAllId();
+
+  @Query("select a.apartment_id,a.roomNo from Apartment a")
+  List<Apartment> getBaseApartment();
 }

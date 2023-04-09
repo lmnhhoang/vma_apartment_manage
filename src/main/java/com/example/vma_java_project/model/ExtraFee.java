@@ -27,5 +27,8 @@ public class ExtraFee {
   @Column(name = "value")
   private long fee_value;
 
-
+  public ExtraFee(String fee_type, long fee_value) {
+    this.fee_type = fee_type;
+    this.fee_value = fee_value;
+  }
 }

@@ -3,6 +3,7 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.ExtraFee;
 import com.example.vma_java_project.repository.ExtraFeeRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Extra Fee", description = "Extra fee management APIs")
 public class ExtraFeeController {
 
   @Autowired

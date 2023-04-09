@@ -11,6 +11,7 @@ import com.example.vma_java_project.repository.RoleRepository;
 import com.example.vma_java_project.repository.UserRepository;
 import com.example.vma_java_project.security.jwt.JwtUtils;
 import com.example.vma_java_project.security.services.IUserDetails;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "Signin/Signup/Logout APIs")
 public class AuthController {
 
   @Autowired

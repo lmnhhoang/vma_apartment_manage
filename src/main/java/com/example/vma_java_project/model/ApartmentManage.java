@@ -28,18 +28,14 @@ public class ApartmentManage {
   @Column(name = "aprtm_id")
   private long aprtm_id;
 
-//    @OneToMany(mappedBy = "apartment_no", cascade = CascadeType.ALL)
-//    @EqualsAndHashCode.Exclude
-//    @ToString.Exclude
-//    private Collection<Apartment> apartmentManages;
-
   @Column(name = "e_value")
   private long e_value;
   @Column(name = "w_value")
   private long w_value;
-  @Column(name = "last_record_date", columnDefinition = "DATE")
+  @Column(name = "record_date", columnDefinition = "DATE")
   private LocalDate record_date;
-
+  @Column(name = "status")
+  private String status;
   @ManyToOne(targetEntity = Apartment.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "aprtm_room", insertable = false, updatable = false)
   @EqualsAndHashCode.Exclude
@@ -49,4 +45,12 @@ public class ApartmentManage {
   @Column(name = "aprtm_room")
   private Long apartment_id;
 
+  public ApartmentManage(long e_value, long w_value, LocalDate record_date, String status,
+      Long apartment_id) {
+    this.e_value = e_value;
+    this.w_value = w_value;
+    this.record_date = record_date;
+    this.status = status;
+    this.apartment_id = apartment_id;
+  }
 }

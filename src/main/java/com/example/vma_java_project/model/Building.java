@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Building")
+@Table(name = "building")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,4 +24,8 @@ public class Building {
 
   @Column(name = "building_name")
   private String building_name;
+
+  public Building(String building_name) {
+    this.building_name = building_name;
+  }
 }

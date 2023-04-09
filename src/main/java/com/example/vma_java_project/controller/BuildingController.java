@@ -3,6 +3,7 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.Building;
 import com.example.vma_java_project.repository.BuildingRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Building", description = "Building management APIs")
 public class BuildingController {
 
   @Autowired

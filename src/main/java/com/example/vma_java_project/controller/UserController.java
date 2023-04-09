@@ -3,6 +3,7 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.User;
 import com.example.vma_java_project.repository.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "User management APIs")
 public class UserController {
 
   @Autowired

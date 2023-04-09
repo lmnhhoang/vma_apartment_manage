@@ -3,6 +3,7 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.Dwellers;
 import com.example.vma_java_project.repository.DwellerRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Dwellers", description = "Dweller management APIs")
 public class DwellerController {
 
   @Autowired

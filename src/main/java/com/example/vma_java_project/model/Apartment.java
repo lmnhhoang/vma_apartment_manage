@@ -46,4 +46,15 @@ public class Apartment {
   private Building building;
   @Column(name = "in_building")
   private Long building_id;
+
+  public Apartment(String roomNo, double acreage, int numOfRoom, String status, String description,
+      String presenter_email, Long building_id) {
+    this.roomNo = roomNo;
+    this.acreage = acreage;
+    this.numOfRoom = numOfRoom;
+    this.status = status;
+    this.description = description;
+    this.presenter_email = presenter_email;
+    this.building_id = building_id;
+  }
 }

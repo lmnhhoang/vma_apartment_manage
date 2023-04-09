@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "Dwellers")
+@Table(name = "dwellers")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,4 +48,14 @@ public class Dwellers {
   @Column(name = "dweller_aprtm")
   private Long apartment_id;
 
+  public Dwellers(double cid, String fullname, String email, String phone, LocalDate birthday,
+      String gender, Long apartment_id) {
+    this.cid = cid;
+    this.fullname = fullname;
+    this.email = email;
+    this.phone = phone;
+    this.birthday = birthday;
+    this.gender = gender;
+    this.apartment_id = apartment_id;
+  }
 }

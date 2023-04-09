@@ -2,7 +2,10 @@ package com.example.vma_java_project.controller;
 
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.ApartmentManage;
+import com.example.vma_java_project.repository.ApartmentRepository;
 import com.example.vma_java_project.repository.AprtManageRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Apartment Manage", description = "Monthly Apartment Value APIs")
 public class AprtmentManageController {
 
   @Autowired
   AprtManageRepository aprtManageRepository;
+
+  @Autowired
+  ApartmentRepository apartmentRepository;
 
   //Get all apartmentManage
   @GetMapping("/listManage")
@@ -87,8 +94,20 @@ public class AprtmentManageController {
   }
 
   @Scheduled(cron = "0 0 5 10 * ?")
-  public ApartmentManage ScheduleAddManage() {
-    ApartmentManage apartmentManage = new ApartmentManage();
-    return aprtManageRepository.save(apartmentManage);
+  public void ScheduleAddManage() {
+    LocalDate currentdate = LocalDate.now();
+    int currentMonth = currentdate.getMonthValue();
+    List<Long> aprtIdList = apartmentRepository.getAllId();
+    for (int i = 0; i < aprtIdList.size(); i++) {
+      Long e_value = aprtManageRepository.getEValueByMonth(currentMonth, aprtIdList.get(i));
+      Long w_value = aprtManageRepository.getWValueByMonth(currentMonth, aprtIdList.get(i));
+      if (e_value == null && w_value == null) {
+        e_value = 0L;
+        w_value = 0L;
+      }
+      ApartmentManage apartmentManage = new ApartmentManage(e_value, w_value, currentdate,
+          "Unchecked", aprtIdList.get(i));
+      aprtManageRepository.save(apartmentManage);
+    }
   }
 }

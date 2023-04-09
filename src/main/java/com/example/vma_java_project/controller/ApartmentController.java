@@ -3,6 +3,7 @@ package com.example.vma_java_project.controller;
 import com.example.vma_java_project.exception.ResourceNotFoundException;
 import com.example.vma_java_project.model.Apartment;
 import com.example.vma_java_project.repository.ApartmentRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "Apartment", description = "Apartment management APIs")
 public class ApartmentController {
 
   @Autowired
@@ -160,4 +162,5 @@ public class ApartmentController {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
 }

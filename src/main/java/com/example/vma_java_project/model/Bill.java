@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name = "Bill")
+@Table(name = "bill")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,7 +46,7 @@ public class Bill {
   private long w_fee;
 
   @Column(name = "ex_fee")
-  private long ex_fee;
+  private double ex_fee;
 
   @Column(name = "status")
   private String status;
@@ -54,4 +54,14 @@ public class Bill {
   @Column(name = "paid_day", columnDefinition = "DATE")
   private LocalDate paid_day;
 
+  public Bill(Long apartment_id, LocalDate createdDate, long e_fee, long w_fee, Double ex_fee,
+      String status, LocalDate paid_day) {
+    this.apartment_id = apartment_id;
+    this.createdDate = createdDate;
+    this.e_fee = e_fee;
+    this.w_fee = w_fee;
+    this.ex_fee = ex_fee;
+    this.status = status;
+    this.paid_day = paid_day;
+  }
 }
