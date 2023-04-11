@@ -1,9 +1,8 @@
-package com.example.vma_java_project;
+package com.example.vma_java_project.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.vma_java_project.model.Apartment;
-import com.example.vma_java_project.model.Building;
 import com.example.vma_java_project.repository.ApartmentRepository;
 import com.example.vma_java_project.repository.BuildingRepository;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Sql("/createBuilding.sql")
 public class ApartmentRepoTest {
 
   @Autowired
@@ -35,7 +35,6 @@ public class ApartmentRepoTest {
   }
 
   @Test
-  @Sql("/createBuilding.sql")
   public void should_store_aprt() {
 
     Apartment apartment = repository.save(
@@ -49,8 +48,8 @@ public class ApartmentRepoTest {
     assertThat(apartment).hasFieldOrPropertyWithValue("presenter_email", "a1@gmail.com");
     assertThat(apartment).hasFieldOrPropertyWithValue("building_id", 1L);
   }
+
   @Test
-  @Sql("/createBuilding.sql")
   public void should_find_all_aprts() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
@@ -67,10 +66,10 @@ public class ApartmentRepoTest {
 
     Iterable<Apartment> apartments = repository.findAll();
 
-    assertThat(apartments).hasSize(4).contains(a1, a2, a3,b1);
+    assertThat(apartments).hasSize(4).contains(a1, a2, a3, b1);
   }
+
   @Test
-  @Sql("/createBuilding.sql")
   public void should_find_aprt_by_id() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
@@ -89,8 +88,8 @@ public class ApartmentRepoTest {
 
     assertThat(foundAprt).isEqualTo(a2);
   }
+
   @Test
-  @Sql("/createBuilding.sql")
   public void should_update_aprt_by_id() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
@@ -105,7 +104,8 @@ public class ApartmentRepoTest {
     Apartment b1 = new Apartment("B1", 70, 4, "Hired", "B1 Room", "b1@gmail.com", 2L);
     entityManager.persist(b1);
 
-    Apartment updatedAprt = new Apartment("A1_update", 60, 2, "Hired", "A1 update Room", "a1@gmail.com", 1L);
+    Apartment updatedAprt = new Apartment("A1_update", 60, 2, "Hired", "A1 update Room",
+        "a1@gmail.com", 1L);
 
     Apartment a = repository.findById(a2.getApartment_id()).get();
     a.setRoomNo(updatedAprt.getRoomNo());
@@ -128,8 +128,8 @@ public class ApartmentRepoTest {
     assertThat(checkA.getPresenter_email()).isEqualTo(updatedAprt.getPresenter_email());
     assertThat(checkA.getBuilding_id()).isEqualTo(updatedAprt.getBuilding_id());
   }
+
   @Test
-  @Sql("/createBuilding.sql")
   public void should_delete_aprt_by_id() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
@@ -148,11 +148,10 @@ public class ApartmentRepoTest {
 
     Iterable<Apartment> apartments = repository.findAll();
 
-    assertThat(apartments).hasSize(3).contains(a1, a3,b1);
+    assertThat(apartments).hasSize(3).contains(a1, a3, b1);
   }
 
   @Test
-  @Sql("/createBuilding.sql")
   public void should_delete_all_aprts() {
 
     entityManager.persist(new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L));
@@ -166,8 +165,7 @@ public class ApartmentRepoTest {
   }
 
   @Test
-  @Sql("/createBuilding.sql")
-  public void should_count_all_aprt_in_building(){
+  public void should_count_all_aprt_in_building() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
     entityManager.persist(a1);
@@ -185,9 +183,9 @@ public class ApartmentRepoTest {
 
     assertThat(count).isEqualTo(3);
   }
+
   @Test
-  @Sql("/createBuilding.sql")
-  public void should_find_all_aprt_in_building(){
+  public void should_find_all_aprt_in_building() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
     entityManager.persist(a1);
@@ -205,9 +203,9 @@ public class ApartmentRepoTest {
 
     assertThat(apartments).hasSize(3);
   }
+
   @Test
-  @Sql("/createBuilding.sql")
-  public void should_find_aprt_by_room(){
+  public void should_find_aprt_by_room() {
 
     Apartment a1 = new Apartment("A1", 50, 3, "Empty", "A1 Room", "a1@gmail.com", 1L);
     entityManager.persist(a1);
@@ -223,6 +221,6 @@ public class ApartmentRepoTest {
 
     Iterable<Apartment> apartments = repository.searchApartmentByRoomNo("A");
 
-    assertThat(apartments).hasSize(3).contains(a1, a2,a3);
+    assertThat(apartments).hasSize(3).contains(a1, a2, a3);
   }
 }

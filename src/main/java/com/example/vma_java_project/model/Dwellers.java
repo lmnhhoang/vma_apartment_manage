@@ -10,10 +10,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -21,6 +24,10 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class Dwellers {
 
   @Id
@@ -45,6 +52,7 @@ public class Dwellers {
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Apartment apartment;
+
   @Column(name = "dweller_aprtm")
   private Long apartment_id;
 

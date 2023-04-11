@@ -1,4 +1,4 @@
-package com.example.vma_java_project;
+package com.example.vma_java_project.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

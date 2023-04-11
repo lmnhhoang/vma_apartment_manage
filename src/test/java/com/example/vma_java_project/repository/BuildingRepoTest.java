@@ -1,11 +1,9 @@
-package com.example.vma_java_project;
+package com.example.vma_java_project.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.vma_java_project.model.Building;
-import com.example.vma_java_project.model.User;
 import com.example.vma_java_project.repository.BuildingRepository;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

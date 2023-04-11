@@ -9,10 +9,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -20,6 +23,10 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class Apartment {
 
   @Id
@@ -39,11 +46,13 @@ public class Apartment {
   private String description;
   @Column(name = "p_email")
   private String presenter_email;
+
   @ManyToOne(targetEntity = Building.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "in_building", insertable = false, updatable = false)
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private Building building;
+
   @Column(name = "in_building")
   private Long building_id;
 
@@ -57,4 +66,6 @@ public class Apartment {
     this.presenter_email = presenter_email;
     this.building_id = building_id;
   }
+
+
 }

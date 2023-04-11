@@ -13,7 +13,9 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -21,6 +23,10 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class ApartmentManage {
 
   @Id
@@ -36,6 +42,7 @@ public class ApartmentManage {
   private LocalDate record_date;
   @Column(name = "status")
   private String status;
+
   @ManyToOne(targetEntity = Apartment.class, fetch = FetchType.EAGER)
   @JoinColumn(name = "aprtm_room", insertable = false, updatable = false)
   @EqualsAndHashCode.Exclude
